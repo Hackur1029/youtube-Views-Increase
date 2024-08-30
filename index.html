@@ -2,120 +2,135 @@
 <html dir="ltr" lang="en-GB">
   <head>
     <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <title>Youtube Views</title>
+    <title>YouTube Views</title>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-    <meta content="#eeeeee" name="theme-color" />
-    <script
-      async="async"
-      src="https://www.gstatic.com/external_hosted/clipboardjs/clipboard.min.js"
-    ></script>
-
+    <meta content="#4caf50" name="theme-color" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
     <style>
       body {
-        font-family: Arial, sans-serif;
-        background-color: #f3f3f3;
+        font-family: 'Roboto', Arial, sans-serif;
+        background-color: #f5f5f5;
         margin: 0;
         padding: 0;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        min-height: 100vh;
       }
-
       .container {
-        width: 80%;
-        max-width: 800px;
-        padding: 20px;
+        width: 90%;
+        max-width: 1000px;
+        padding: 30px;
         background-color: #fff;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
       }
-
       .container h1 {
         text-align: center;
-        color: #333;
-        margin-bottom: 20px;
+        color: #4caf50;
+        margin-bottom: 30px;
+        font-size: 2.5em;
       }
-
       .input-group {
-        margin-bottom: 20px;
+        margin-bottom: 30px;
       }
-
       .input-group input {
-        width: calc(100% - 100px);
-        padding: 10px;
+        width: 100%;
+        padding: 12px;
         font-size: 16px;
-        border: 1px solid #ccc;
+        border: 2px solid #4caf50;
         border-radius: 5px;
+        margin-bottom: 15px;
+        transition: border-color 0.3s ease;
       }
-
+      .input-group input:focus {
+        outline: none;
+        border-color: #45a049;
+      }
       .input-group button {
-        width: 100px;
-        padding: 10px;
-        font-size: 16px;
+        width: 100%;
+        padding: 12px;
+        font-size: 18px;
         border: none;
         background-color: #4caf50;
         color: #fff;
         border-radius: 5px;
         cursor: pointer;
+        transition: background-color 0.3s ease;
       }
-
+      .input-group button:hover {
+        background-color: #45a049;
+      }
       #player {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
+        gap: 20px;
       }
-
       iframe {
-        margin: 10px;
         border: none;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        transition: transform 0.3s ease;
+      }
+      iframe:hover {
+        transform: scale(1.05);
+      }
+      @media (max-width: 768px) {
+        .container {
+          width: 95%;
+          padding: 20px;
+        }
+        .container h1 {
+          font-size: 2em;
+        }
+        iframe {
+          width: 100%;
+          height: auto;
+          aspect-ratio: 16 / 9;
+        }
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>Youtube Views By Hackur</h1>
+      <h1>YouTube Views Booster</h1>
       <div class="input-group">
         <input id="urlvideo" placeholder="Enter YouTube video URL" />
-        <br /><br />
-        <input id="nbrvideo" placeholder="Number Of Views" />
-        <br /><br />
-        <button onclick="play();">Play</button>
+        <input id="nbrvideo" type="number" min="1" max="10" placeholder="Number of Views (1-10)" />
+        <button onclick="play();">Generate Views</button>
       </div>
-
       <div id="player"></div>
-
-      <script>
-        function play() {
-          var urlvid = document.getElementById("urlvideo").value;
-          var n = document.getElementById("nbrvideo").value;
-
-          if (urlvid.includes("youtu.be")) {
-            var vid = urlvid.split("/")[3];
-          } else if (urlvid.includes("&list=")) {
-            var fields = urlvid.split("?v=")[1];
-            var vid = fields.split("&")[0];
-          } else {
-            var fields = urlvid.split("?v=")[1];
-            var vid = fields.split("&")[0];
-          }
-
-          if (vid != "") {
-            var urlvid = "https://www.youtube.com/embed/" + vid + "?autoplay=1"; // Add autoplay parameter
-            var playerDiv = document.getElementById("player");
-            playerDiv.innerHTML = "";
-
-            for (var i = 1; i <= n; i++) {
-              var iframe = document.createElement("iframe");
-              iframe.src = urlvid;
-              iframe.width = "256";
-              iframe.height = "144";
-              playerDiv.appendChild(iframe);
-            }
-          }
-        }
-      </script>
     </div>
+    <script>
+      function play() {
+        var urlvid = document.getElementById("urlvideo").value;
+        var n = Math.min(Math.max(parseInt(document.getElementById("nbrvideo").value) || 1, 1), 10);
+        var vid = "";
+
+        if (urlvid.includes("youtu.be")) {
+          vid = urlvid.split("/").pop().split("?")[0];
+        } else if (urlvid.includes("youtube.com")) {
+          var params = new URLSearchParams(new URL(urlvid).search);
+          vid = params.get("v");
+        }
+
+        if (vid) {
+          var urlvid = `https://www.youtube.com/embed/${vid}?autoplay=1&mute=1`;
+          var playerDiv = document.getElementById("player");
+          playerDiv.innerHTML = "";
+          for (var i = 1; i <= n; i++) {
+            var iframe = document.createElement("iframe");
+            iframe.src = urlvid;
+            iframe.width = "320";
+            iframe.height = "180";
+            iframe.allow = "autoplay";
+            playerDiv.appendChild(iframe);
+          }
+        } else {
+          alert("Invalid YouTube URL. Please try again.");
+        }
+      }
+    </script>
   </body>
 </html>
