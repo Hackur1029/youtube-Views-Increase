@@ -2,10 +2,9 @@
 <html dir="ltr" lang="en-GB">
   <head>
     <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <title>YouTube Views</title>
+    <title>YouTube Views Booster</title>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
     <meta content="#4caf50" name="theme-color" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
     <style>
       body {
         font-family: 'Roboto', Arial, sans-serif;
@@ -42,6 +41,7 @@
         border-radius: 5px;
         margin-bottom: 15px;
         transition: border-color 0.3s ease;
+        box-sizing: border-box;
       }
       .input-group input:focus {
         outline: none;
@@ -62,12 +62,14 @@
         background-color: #45a049;
       }
       #player {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 20px;
+        justify-content: center;
       }
       iframe {
+        width: 100%;
+        aspect-ratio: 16 / 9;
         border: none;
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         border-radius: 5px;
@@ -75,6 +77,12 @@
       }
       iframe:hover {
         transform: scale(1.05);
+      }
+      .credit {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.9em;
+        color: #666;
       }
       @media (max-width: 768px) {
         .container {
@@ -84,11 +92,9 @@
         .container h1 {
           font-size: 2em;
         }
-        iframe {
-          width: 100%;
-          height: auto;
-          aspect-ratio: 16 / 9;
-        }
+      }
+      a {
+        text-decoration:none;
       }
     </style>
   </head>
@@ -97,15 +103,16 @@
       <h1>YouTube Views Booster</h1>
       <div class="input-group">
         <input id="urlvideo" placeholder="Enter YouTube video URL" />
-        <input id="nbrvideo" type="number" min="1" max="10" placeholder="Number of Views (1-10)" />
+        <input id="nbrvideo" type="number" min="1" placeholder="Number of Views" />
         <button onclick="play();">Generate Views</button>
       </div>
       <div id="player"></div>
+      <div class="credit">Made by <a href="https://sawwqib.vercel.app">Saqib</a></div>
     </div>
     <script>
       function play() {
         var urlvid = document.getElementById("urlvideo").value;
-        var n = Math.min(Math.max(parseInt(document.getElementById("nbrvideo").value) || 1, 1), 10);
+        var n = parseInt(document.getElementById("nbrvideo").value) || 1;
         var vid = "";
 
         if (urlvid.includes("youtu.be")) {
@@ -122,8 +129,6 @@
           for (var i = 1; i <= n; i++) {
             var iframe = document.createElement("iframe");
             iframe.src = urlvid;
-            iframe.width = "320";
-            iframe.height = "180";
             iframe.allow = "autoplay";
             playerDiv.appendChild(iframe);
           }
